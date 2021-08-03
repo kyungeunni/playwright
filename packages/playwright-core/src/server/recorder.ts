@@ -64,7 +64,8 @@ export class Recorder implements InstrumentationListener {
     let recorderPromise = (context as any)[symbol] as Promise<Recorder>;
     if (!recorderPromise) {
       const recorder = new Recorder(context, params);
-      recorderPromise = recorder.install().then(() => recorder);
+      recorderPromise = recorder.install(Boolean(params.showRecorder)).then(() => recorder);
+
       (context as any)[symbol] = recorderPromise;
     }
     return recorderPromise;
@@ -78,7 +79,7 @@ export class Recorder implements InstrumentationListener {
     context.instrumentation.addListener(this, context);
   }
 
-  async install() {
+  async installRecorder() {
     const recorderApp = await RecorderApp.open(this._context._browser.options.sdkLanguage, !!this._context._browser.options.headful);
     this._recorderApp = recorderApp;
     recorderApp.once('close', () => {
@@ -119,11 +120,17 @@ export class Recorder implements InstrumentationListener {
       recorderApp.setPaused(this._debugger.isPaused()),
       this._pushAllSources()
     ]);
+    
+    (this._context as any).recorderAppForTest = this._recorderApp;
+}
 
+async install(showRecorder: Boolean) {
+  if (showRecorder)
+    await this.installRecorder();
     this._context.once(BrowserContext.Events.Close, () => {
       this._contextRecorder.dispose();
       this._context.instrumentation.removeListener(this);
-      recorderApp.close().catch(() => {});
+      this._recorderApp?.close().catch(() => {});
     });
     this._contextRecorder.on(ContextRecorder.Events.Change, (data: { sources: Source[], primaryFileName: string }) => {
       this._recorderSources = data.sources;
@@ -164,8 +171,6 @@ export class Recorder implements InstrumentationListener {
     if (this._debugger.isPaused())
       this._pausedStateChanged();
     this._debugger.on(Debugger.Events.PausedStateChanged, () => this._pausedStateChanged());
-
-    (this._context as any).recorderAppForTest = recorderApp;
   }
 
   _pausedStateChanged() {
@@ -320,7 +325,7 @@ class ContextRecorder extends EventEmitter {
     const orderedLanguages = [primaryLanguage, ...languages];
 
     this._recorderSources = [];
-    const generator = new CodeGenerator(context._browser.options.name, !!params.startRecording, params.launchOptions || {}, params.contextOptions || {}, params.device, params.saveStorage);
+    const generator = new CodeGenerator(context._browser.options.name, !!params.startRecording, params.launchOptions || {}, params.contextOptions || {}, params.device, params.saveStorage, params.actionListener);
     const throttledOutputFile = params.outputFile ? new ThrottledFile(params.outputFile) : null;
     generator.on('change', () => {
       this._recorderSources = [];

@@ -33,14 +33,14 @@ export class CodeGenerator extends EventEmitter {
   private _enabled: boolean;
   private _options: LanguageGeneratorOptions;
 
-  constructor(browserName: string, generateHeaders: boolean, launchOptions: LaunchOptions, contextOptions: BrowserContextOptions, deviceName: string | undefined, saveStorage: string | undefined) {
+  constructor(browserName: string, generateHeaders: boolean, launchOptions: LaunchOptions, contextOptions: BrowserContextOptions, deviceName: string | undefined, saveStorage: string | undefined, actionListener: EventEmitter | undefined) {
     super();
 
     // Make a copy of options to modify them later.
     launchOptions = { headless: false, ...launchOptions };
     contextOptions = { ...contextOptions };
     this._enabled = generateHeaders;
-    this._options = { browserName, generateHeaders, launchOptions, contextOptions, deviceName, saveStorage };
+    this._options = { browserName, generateHeaders, launchOptions, contextOptions, deviceName, saveStorage, actionListener };
     this.restart();
   }
 
@@ -80,6 +80,7 @@ export class CodeGenerator extends EventEmitter {
       return;
     const action = actionInContext.action;
     let eraseLastAction = false;
+    this._options.actionListener?.emit('action', actionInContext);
     if (this._lastAction && this._lastAction.frame.pageAlias === actionInContext.frame.pageAlias) {
       const lastAction = this._lastAction.action;
       // We augment last action based on the type.

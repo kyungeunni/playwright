@@ -367,15 +367,7 @@ export class BrowserContext extends ChannelOwner<channels.BrowserContextChannel>
     }
   }
 
-  async _enableRecorder(params: {
-      language: string,
-      launchOptions?: LaunchOptions,
-      contextOptions?: BrowserContextOptions,
-      device?: string,
-      saveStorage?: string,
-      startRecording?: boolean,
-      outputFile?: string
-  }) {
+  async _enableRecorder(params: channels.BrowserContextRecorderSupplementEnableParams) {
     await this._channel.recorderSupplementEnable(params);
   }
 }
