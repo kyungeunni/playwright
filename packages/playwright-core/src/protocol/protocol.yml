@@ -944,6 +944,8 @@ BrowserContext:
         device: string?
         saveStorage: string?
         outputFile: string?
+        showRecorder: boolean?
+        actionListener: json?
 
     newCDPSession:
       parameters:

@@ -27,7 +27,7 @@ import { Worker } from './worker';
 import { Events } from './events';
 import { TimeoutSettings } from '../common/timeoutSettings';
 import { Waiter } from './waiter';
-import type { URLMatch, Headers, WaitForEventOptions, BrowserContextOptions, StorageState, LaunchOptions } from './types';
+import type { URLMatch, Headers, WaitForEventOptions, BrowserContextOptions, StorageState } from './types';
 import { headersObjectToArray, isRegExp, isString } from '../utils';
 import { mkdirIfNeeded } from '../utils/fileUtils';
 import { isSafeCloseError } from '../common/errors';
