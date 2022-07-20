@@ -157,7 +157,7 @@ export class Recorder implements InstrumentationListener {
 
     await this._context.exposeBinding('__pw_recorderSetSelector', false, async (_, selector: string) => {
       this._setMode('none');
-      this._params.actionListener?.emit('selector', selector);
+      this._contextRecorder.emitSelector(selector);
       await this._recorderApp?.setSelector(selector, true);
       await this._recorderApp?.bringToFront();
     });
@@ -388,6 +388,10 @@ class ContextRecorder extends EventEmitter {
     for (const timer of this._timers)
       clearTimeout(timer);
     this._timers.clear();
+  }
+
+  emitSelector(selector: string) {
+    this._params.actionListener?.emit('selector', selector);
   }
 
   private async _onPage(page: Page) {
