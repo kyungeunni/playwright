@@ -122,9 +122,9 @@ export class Recorder implements InstrumentationListener {
     ]);
     
     (this._context as any).recorderAppForTest = this._recorderApp;
-}
+  }
 
-async install(showRecorder: Boolean) {
+  async install(showRecorder: Boolean) {
   if (showRecorder)
     await this.installRecorder();
     this._context.once(BrowserContext.Events.Close, () => {
@@ -157,8 +157,13 @@ async install(showRecorder: Boolean) {
 
     await this._context.exposeBinding('__pw_recorderSetSelector', false, async (_, selector: string) => {
       this._setMode('none');
+      this._params.actionListener?.emit('selector', selector);
       await this._recorderApp?.setSelector(selector, true);
       await this._recorderApp?.bringToFront();
+    });
+    // added for synthetics
+    await this._context.exposeBinding('__pw_setMode', false, async  (_, mode: Mode) => {
+      this._setMode(mode);
     });
 
     await this._context.exposeBinding('__pw_resume', false, () => {
