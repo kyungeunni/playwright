@@ -1035,6 +1035,8 @@ BrowserContext:
         outputFile: string?
         handleSIGINT: boolean?
         omitCallTracking: boolean?
+        showRecorder: boolean?
+        actionListener: json?
 
     newCDPSession:
       parameters:
