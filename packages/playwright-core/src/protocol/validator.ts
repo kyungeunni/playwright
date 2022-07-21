@@ -497,6 +497,8 @@ export function createScheme(tChannel: (name: string) => Validator): Scheme {
     device: tOptional(tString),
     saveStorage: tOptional(tString),
     outputFile: tOptional(tString),
+    showRecorder: tOptional(tBoolean),
+    actionListener: tOptional(tAny),
   });
   scheme.BrowserContextNewCDPSessionParams = tObject({
     page: tOptional(tChannel('Page')),

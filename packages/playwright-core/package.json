@@ -31,6 +31,8 @@
     "./lib/utils/utils": "./lib/utils/utils.js",
     "./lib/utils/stackTrace": "./lib/utils/stackTrace.js",
     "./lib/remote/playwrightServer": "./lib/remote/playwrightServer.js",
+    "./lib/server": "./lib/server/index.js",
+    "./lib/server/recorder/javascript": "./lib/server/recorder/javascript.js",
     "./lib/remote/playwrightClient": "./lib/remote/playwrightClient.js"
   },
   "types": "types/types.d.ts",

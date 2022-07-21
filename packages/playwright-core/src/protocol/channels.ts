@@ -1247,6 +1247,8 @@ export type BrowserContextRecorderSupplementEnableParams = {
   device?: string,
   saveStorage?: string,
   outputFile?: string,
+  showRecorder?: boolean,
+  actionListener?: any,
 };
 export type BrowserContextRecorderSupplementEnableOptions = {
   language?: string,
@@ -1257,6 +1259,8 @@ export type BrowserContextRecorderSupplementEnableOptions = {
   device?: string,
   saveStorage?: string,
   outputFile?: string,
+  showRecorder?: boolean,
+  actionListener?: any,
 };
 export type BrowserContextRecorderSupplementEnableResult = void;
 export type BrowserContextNewCDPSessionParams = {
